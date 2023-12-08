@@ -1,6 +1,13 @@
 import React, { useEffect } from 'react';
-import { View, Text, Button } from 'react-native';
+import { View, Text } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Logo from '../components/Logo';
+import Header from '../components/Header';
+import Background from '../components/Background'
+import Paragraph from '../components/Paragraph';
+import Button from '../components/Button';
+
+
 
 const HomeScreen = ({ navigation }) => {
   useEffect(() => {
@@ -45,12 +52,31 @@ const HomeScreen = ({ navigation }) => {
   };
 
   return (
-    <View>
-      <Text>Bienvenido a la pantalla principal</Text>
-      <Button title="Ver Repositorios" onPress={goToRepositories} />
-      <Button title="Editar Información" onPress={goToEditInfo} />
-      <Button title="Cerrar Sesión" onPress={handleLogout} />
-    </View>
+    <Background>
+      <Logo />
+      <Header>Mobile Hub</Header>
+      <Paragraph>
+        Bienvenido a casa!
+      </Paragraph>
+      <Button
+        mode="contained"
+        onPress={goToRepositories}
+      >
+      Ver Repositorios
+      </Button>
+      <Button
+        mode="outlined"
+        onPress={goToEditInfo}
+      >
+      Editar Información
+      </Button>
+      <Button
+        mode="outlined"
+        onPress={handleLogout}
+      >
+      Cerrar Sesión
+      </Button>
+    </Background>
   );
 };
 

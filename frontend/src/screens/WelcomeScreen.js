@@ -1,22 +1,35 @@
 import React from 'react';
-import { View, Text, Button } from 'react-native';
+import { View, Text } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import Logo from '../components/Logo';
+import Header from '../components/Header';
+import Background from '../components/Background'
+import Paragraph from '../components/Paragraph';
+import Button from '../components/Button';
 
 const WelcomeScreen = ({ navigation }) => {
   return (
-    <View>
+    <Background>
       <Logo />
-      <Text>Bienvenido a MobileHub</Text>
+      <Header>Mobile Hub</Header>
+      <Paragraph>
+        Un lugar comodo para el desarrollador.
+      </Paragraph>
       <Button
-        title="Iniciar Sesión"
+        mode="contained"
         onPress={() => navigation.navigate('Login')}
-      />
+      >
+      Iniciar Sesión
+      </Button>
       <Button
         title="Registrarse"
+        mode="outlined"
         onPress={() => navigation.navigate('Register')}
-      />
-    </View>
+      >
+        Registrarse
+      </Button>
+
+    </Background>
   );
 };
 

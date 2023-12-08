@@ -1,43 +1,91 @@
-import React, { useState } from 'react';
-import { View, Text, Button, StyleSheet, ScrollView, Alert } from 'react-native';
-import Input from '../components/Input';
-import DatePickerField from '../components/DatePickerField';
+import React, { useState, useEffect } from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  SafeAreaView,
+  TouchableOpacity,
+  Alert,
+  ScrollView,
+} from 'react-native';
+import TextInput from '../components/TextInput';
+import DatePicker from 'react-native-date-picker';
 import axios from 'axios';
 import { REACT_APP_API_URL } from '@env';
-import AsyncStorage from '@react-native-async-storage/async-storage'; // Importa AsyncStorage
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Background from '../components/Background';
+import Logo from '../components/Logo';
+import Header from '../components/Header';
+import Button from '../components/Button';
+import BackButton from '../components/BackButton';
 
 const RegisterScreen = ({ navigation }) => {
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [email, setEmail] = useState('');
-  const [rut, setRut] = useState('');
+  const [firstName, setFirstName] = useState({ value: '', error: '' });
+  const [lastName, setLastName] = useState({ value: '', error: '' });
+  const [email, setEmail] = useState({ value: '', error: '' });
+  const [rut, setRut] = useState({ value: '', error: '' });
   const [dateOfBirth, setDateOfBirth] = useState(new Date());
+  const [allUsers, setAllUsers] = useState([]);
+
+  useEffect(() => {
+    // Cargar la lista de todos los usuarios al montar el componente
+    loadAllUsers();
+  }, []);
+
+  const loadAllUsers = async () => {
+    try {
+      const apiUrl = REACT_APP_API_URL || 'http://localhost:3001';
+      const response = await axios.get(`${apiUrl}/api/users/all-users`);
+      setAllUsers(response.data);
+    } catch (error) {
+      console.error('Error al cargar la lista de usuarios:', error);
+    }
+  };
 
   const handleRegister = async () => {
     // Validaciones
-    if (!isValidEmail(email)) {
-      showAlert('Error', 'Ingrese un correo electrónico válido con dominio de la UCN.');
-      return;
+    const emailError = !isValidEmail(email.value)
+      ? 'Ingrese un correo electrónico válido con dominio de la UCN.'
+      : '';
+    const rutError = !isValidRut(rut.value) ? 'Ingrese un RUT válido.' : '';
+    const rutDigitError = !isValidRutDigit(rut.value)
+      ? 'El dígito verificador del RUT no es válido.'
+      : '';
+    const birthYearError = !isValidBirthYear(dateOfBirth.getFullYear())
+      ? 'Ingrese un año de nacimiento válido.'
+      : '';
+    const fullNameError = !isValidFullName(firstName.value, lastName.value)
+      ? 'Ingrese un nombre completo válido.'
+      : '';
+
+    // Validar que el email y el rut sean únicos
+    const isEmailUnique = !allUsers.some((user) => user.email === email.value);
+    const isRutUnique = !allUsers.some((user) => user.rut === rut.value);
+
+    if (!isEmailUnique) {
+      setEmail({ ...email, error: 'Este correo electrónico ya está registrado.' });
+    } else {
+      setEmail({ ...email, error: emailError });
     }
 
-    if (!isValidRut(rut)) {
-      showAlert('Error', 'Ingrese un RUT válido.');
-      return;
+    if (!isRutUnique) {
+      setRut({ ...rut, error: 'Este RUT ya está registrado.' });
+    } else {
+      setRut({ ...rut, error: rutError || rutDigitError });
     }
 
-    if (!isValidRutDigit(rut)) {
-      showAlert('Error', 'El dígito verificador del RUT no es válido.');
-      return;
-    }
+    setFirstName({ ...firstName, error: fullNameError });
+    setLastName({ ...lastName, error: fullNameError });
 
-    if (!isValidBirthYear(dateOfBirth.getFullYear())) {
-      showAlert('Error', 'Ingrese un año de nacimiento válido.');
-      return;
-    }
-
-    if (!isValidFullName(firstName, lastName)) {
-      showAlert('Error', 'Ingrese un nombre completo válido.');
+    if (
+      emailError ||
+      rutError ||
+      rutDigitError ||
+      birthYearError ||
+      fullNameError ||
+      !isEmailUnique ||
+      !isRutUnique
+    ) {
       return;
     }
 
@@ -45,12 +93,12 @@ const RegisterScreen = ({ navigation }) => {
     try {
       const apiUrl = REACT_APP_API_URL || 'http://localhost:3001';
       const response = await axios.post(`${apiUrl}/api/users/register`, {
-        firstName,
-        lastName,
-        email,
-        password: rut.replace(/[.-]/g, ''), // Contraseña será el RUT sin puntos ni guion
+        firstName: firstName.value,
+        lastName: lastName.value,
+        email: email.value,
+        password: rut.value.replace(/[.-]/g, ''), // Contraseña será el RUT sin puntos ni guion
         dateOfBirth,
-        rut,
+        rut: rut.value,
       });
 
       showAlert('Éxito', response.data.message);
@@ -62,21 +110,25 @@ const RegisterScreen = ({ navigation }) => {
       // Aquí debes manejar la navegación de acuerdo a tu estructura de navegación
     } catch (error) {
       console.error('Error al registrar usuario:', error);
-      showAlert('Error', 'Hubo un problema al registrar el usuario. Por favor, inténtalo de nuevo.');
+      showAlert(
+        'Error',
+        'Hubo un problema al registrar el usuario. Por favor, inténtalo de nuevo.',
+      );
     }
   };
 
-  const isValidEmail = (email) => {
-    const ucnDomainRegex = /^[a-zA-Z0-9._-]+@(ucn\.cl|alumnos\.ucn\.cl|disc\.ucn\.cl|ce\.ucn\.cl)$/;
+  const isValidEmail = email => {
+    const ucnDomainRegex =
+      /^[a-zA-Z0-9._-]+@(ucn\.cl|alumnos\.ucn\.cl|disc\.ucn\.cl|ce\.ucn\.cl)$/;
     return ucnDomainRegex.test(email);
   };
 
-  const isValidRut = (rut) => {
+  const isValidRut = rut => {
     const rutRegex = /^(\d{1,3}(\.?\d{3}){1,2}-[\dkK])$/;
     return rutRegex.test(rut);
   };
 
-  const isValidRutDigit = (rut) => {
+  const isValidRutDigit = rut => {
     const cleanRut = rut.replace(/[.-]/g, '');
     const rutDigits = cleanRut.slice(0, -1);
     const verifierDigit = cleanRut.slice(-1).toUpperCase();
@@ -85,7 +137,7 @@ const RegisterScreen = ({ navigation }) => {
     return verifierDigit === calculatedVerifier;
   };
 
-  const calculateRutVerifier = (rutDigits) => {
+  const calculateRutVerifier = rutDigits => {
     const reversedDigits = Array.from(rutDigits, Number).reverse();
     let sum = 0;
     let multiplier = 2;
@@ -101,67 +153,79 @@ const RegisterScreen = ({ navigation }) => {
     return result === 10 ? 'K' : String(result);
   };
 
-  const isValidBirthYear = (year) => {
+  const isValidBirthYear = year => {
     const currentYear = new Date().getFullYear();
     return year >= 1900 && year <= currentYear;
   };
 
   const isValidFullName = (firstName, lastName) => {
-    return firstName.length + lastName.length >= 10 && firstName.length + lastName.length <= 150;
+    return (
+      firstName.length + lastName.length >= 10 &&
+      firstName.length + lastName.length <= 150
+    );
   };
 
-  const formatRut = (rut) => {
-    // Formatea el RUT agregando puntos y guión
+  const formatRut = rut => {
     const [digits, verifier] = rut.split('-');
     const formattedDigits = digits.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
     return `${formattedDigits}-${verifier}`;
   };
 
   const showAlert = (title, message) => {
-    Alert.alert(title, message, [{ text: 'OK', onPress: () => {} }]);
+    Alert.alert(title, message, [{text: 'OK', onPress: () => {}}]);
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>Registro</Text>
+    <Background>
+      <BackButton goBack={navigation.goBack} />
+      <Logo />
+      <Header>Registro</Header>
+      <SafeAreaView style={styles.container}>
+      <ScrollView style={styles.scrollView}>
+        <TextInput
+          label="Nombre"
+          value={firstName.value}
+          onChangeText={text => setFirstName({value: text, error: ''})}
+          error={!!firstName.error}
+          errorText={firstName.error}
+        />
 
-      <Input
-        placeholder="Nombre"
-        value={firstName}
-        onChangeText={setFirstName}
-        style={styles.input}
-      />
+        <TextInput
+          label="Apellido"
+          value={lastName.value}
+          onChangeText={text => setLastName({value: text, error: ''})}
+          error={!!lastName.error}
+          errorText={lastName.error}
+        />
 
-      <Input
-        placeholder="Apellido"
-        value={lastName}
-        onChangeText={setLastName}
-        style={styles.input}
-      />
+        <TextInput
+          label="Correo electrónico"
+          value={email.value}
+          onChangeText={text => setEmail({value: text, error: ''})}
+          keyboardType="email-address"
+          error={!!email.error}
+          errorText={email.error}
+        />
 
-      <Input
-        placeholder="Correo electrónico (dominio UCN)"
-        value={email}
-        onChangeText={setEmail}
-        style={styles.input}
-        keyboardType="email-address"
-      />
+        <TextInput
+          label="RUT (con puntos y guión)"
+          value={rut.value}
+          onChangeText={text => setRut({value: text, error: ''})}
+          error={!!rut.error}
+          errorText={rut.error}
+        />
 
-      <Input
-        placeholder="RUT (con puntos y guión)"
-        value={rut}
-        onChangeText={setRut}
-        style={styles.input}
-      />
-
-      <DatePickerField
-        label="Fecha de Nacimiento"
-        value={dateOfBirth}
-        onChange={setDateOfBirth}
-      />
-
-      <Button title="Registrarse" onPress={handleRegister} />
-    </ScrollView>
+        <DatePicker
+          mode={'date'}
+          date={dateOfBirth}
+          onDateChange={setDateOfBirth}
+        />
+      </ScrollView>
+    </SafeAreaView>
+      <Button mode="contained" onPress={handleRegister} style={{marginTop: 24}}>
+        Registrarse
+      </Button>
+    </Background>
   );
 };
 

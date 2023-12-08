@@ -10,12 +10,20 @@ import HomeScreen from './screens/HomeScreen';
 import EditProfileScreen from './screens/EditProfileScreen'; 
 import RegisterScreen from './screens/RegisterScreen';
 
+import { enGB, registerTranslation } from 'react-native-paper-dates'
+registerTranslation('en-GB', enGB)
+
 const Stack = createStackNavigator();
 
 const App = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Welcome">
+      <Stack.Navigator
+        initialRouteName="Welcome"
+        screenOptions={{
+          headerShown: false, // Oculta la barra de navegación en todas las pantallas
+        }}
+      >
         <Stack.Screen name="Welcome" component={WelcomeScreen} />
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="Repositories" component={RepositoriesScreen} />

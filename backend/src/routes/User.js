@@ -16,6 +16,6 @@ router.get('/current-user', jwtMiddleware, userController.getCurrentUser);
 router.put('/update-profile', jwtMiddleware, userController.updateProfile);
 
 // Ruta para obtener la lista de todos los usuarios
-router.get('/all-users', jwtMiddleware, userController.getAllUsers);
+router.get('/all-users', userController.getAllUsers);
 
 module.exports = router;

@@ -1,64 +1,62 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList } from 'react-native';
+import { View, FlatList } from 'react-native';
 import axios from 'axios';
 import { useRoute } from '@react-navigation/native';
-import AsyncStorage from '@react-native-async-storage/async-storage'; // Importa AsyncStorage
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Header from '../components/Header';
+import Background from '../components/Background';
+import CommitItem from '../components/CommitItem';
+import BackButton from '../components/BackButton';
+import { useNavigation } from '@react-navigation/native';
 import { REACT_APP_API_URL } from '@env';
-
 
 const RepositoryDetailScreen = () => {
   const [commits, setCommits] = useState([]);
   const route = useRoute();
   const { username, repoName } = route.params;
+  const navigation = useNavigation();
 
-  // Dentro de la función RepositoryDetailScreen
-useEffect(() => {
-  const fetchCommits = async () => {
-    try {
-      // Obtén el token almacenado en AsyncStorage
-      const token = await AsyncStorage.getItem('jwtToken');
+  useEffect(() => {
+    const fetchCommits = async () => {
+      try {
+        const token = await AsyncStorage.getItem('jwtToken');
 
-      // Si no hay token, redirige al usuario a la pantalla de inicio de sesión
-      if (!token) {
-        navigation.navigate('Welcome');
-        return;
+        if (!token) {
+          navigation.navigate('Welcome');
+          return;
+        }
+
+        const apiUrl = `${REACT_APP_API_URL}/github/user/${username}/repos/${repoName}/commits`;
+        const response = await axios.get(apiUrl, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        // Ordenar commits por fecha de última modificación (de más reciente a más antiguo)
+        response.data.sort((a, b) => new Date(b.commit.author.date) - new Date(a.commit.author.date));
+
+        setCommits(response.data);
+      } catch (error) {
+        console.error('Error al obtener commits:', error);
       }
+    };
 
-      const apiUrl = `${REACT_APP_API_URL}/github/user/${username}/repos/${repoName}/commits`;
-      const response = await axios.get(apiUrl, {
-        headers: {
-          Authorization: `Bearer ${token}`, // Añade el token al encabezado
-        },
-      });
+    fetchCommits();
+  }, [username, repoName, navigation]);
 
-      setCommits(response.data);
-    } catch (error) {
-      console.error('Error al obtener commits:', error);
-    }
-  };
-
-  fetchCommits();
-}, [username, repoName]);
-
-
-  const renderCommitItem = ({ item }) => (
-    <View>
-      <Text>Author: {item.commit.author.name}</Text>
-      <Text>Message: {item.commit.message}</Text>
-      <Text>Date: {new Date(item.commit.author.date).toLocaleDateString()}</Text>
-    </View>
-  );
+  const renderCommitItem = ({ item }) => <CommitItem commit={item} />;
 
   return (
-    <View>
-      <Text>Visualizar commits de un repositorio</Text>
+    <Background>
+      <BackButton goBack={navigation.goBack} />
+      <Header mode="big">Visualizar commits de un repositorio</Header>
       <FlatList
         data={commits}
         keyExtractor={(item) => item.sha}
         renderItem={renderCommitItem}
       />
-    </View>
+    </Background>
   );
 };
 
