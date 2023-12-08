@@ -1,8 +1,21 @@
+/**
+ * @fileoverview Middleware para verificar la validez de los tokens JWT.
+ * @module middleware/jwtMiddleware
+ */
+
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
 
 dotenv.config();
 
+/**
+ * Middleware para verificar la validez de los tokens JWT.
+ * @function
+ * @param {Object} req - Objeto de solicitud express.
+ * @param {Object} res - Objeto de respuesta express.
+ * @param {Function} next - Función para pasar el control al siguiente middleware/ruta.
+ * @throws {Object} - Objeto de error en caso de token inválido o no proporcionado.
+ */
 function jwtMiddleware(req, res, next) {
   const tokenHeader = req.header('Authorization');
 
@@ -14,10 +27,9 @@ function jwtMiddleware(req, res, next) {
     // Elimina la palabra "Bearer " del token
     const token = tokenHeader.replace('Bearer ', '');
 
-    
+    // Verifica la validez del token utilizando la clave secreta
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     req.userId = decoded.userId;
-    console.error("We balling");
     next();
   } catch (error) {
     console.error(error);
@@ -26,3 +38,4 @@ function jwtMiddleware(req, res, next) {
 }
 
 module.exports = jwtMiddleware;
+

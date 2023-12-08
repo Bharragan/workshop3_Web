@@ -1,3 +1,22 @@
+/**
+ * Pantalla de Bienvenida.
+ *
+ * Proporciona a los usuarios la opción de iniciar sesión o registrarse en la aplicación.
+ * Muestra el logo y un mensaje de bienvenida, junto con botones para iniciar sesión o
+ * registrarse.
+ *
+ * @component
+ *
+ * @param {Object} props - Propiedades de la pantalla.
+ * @param {Object} props.navigation - Objeto de navegación que permite la transición entre pantallas.
+ *
+ * @returns {JSX.Element} - Elemento JSX que representa la pantalla de bienvenida.
+ *
+ * @example
+ * // Ejemplo de uso en una navegación de React Navigation:
+ * <Stack.Screen name="Welcome" component={WelcomeScreen} />
+ */
+
 import React from 'react';
 import { View, Text } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';

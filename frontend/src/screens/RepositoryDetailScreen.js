@@ -1,3 +1,19 @@
+/**
+ * Pantalla de Detalles del Repositorio.
+ *
+ * Muestra una lista de commits de un repositorio específico de un usuario, con detalles
+ * como el mensaje del commit, el autor y la fecha. Permite al usuario navegar hacia atrás
+ * a la pantalla anterior.
+ *
+ * @component
+ *
+ * @returns {JSX.Element} - Elemento JSX que representa la pantalla de detalles del repositorio.
+ *
+ * @example
+ * // Ejemplo de uso en una navegación de React Navigation:
+ * <Stack.Screen name="RepositoryDetail" component={RepositoryDetailScreen} />
+ */
+
 import React, { useState, useEffect } from 'react';
 import { View, FlatList } from 'react-native';
 import axios from 'axios';

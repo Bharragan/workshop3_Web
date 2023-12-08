@@ -1,3 +1,23 @@
+/**
+ * Pantalla de Registro.
+ *
+ * Permite a los usuarios registrarse proporcionando información como nombre, apellido,
+ * correo electrónico, RUT y fecha de nacimiento. Realiza diversas validaciones, incluyendo
+ * la verificación de la unicidad de correo electrónico y RUT, y realiza una solicitud al
+ * servidor para registrar al nuevo usuario.
+ *
+ * @component
+ *
+ * @param {Object} props - Propiedades de la pantalla.
+ * @param {Object} props.navigation - Objeto de navegación que permite la transición entre pantallas.
+ *
+ * @returns {JSX.Element} - Elemento JSX que representa la pantalla de registro.
+ *
+ * @example
+ * // Ejemplo de uso en una navegación de React Navigation:
+ * <Stack.Screen name="Register" component={RegisterScreen} />
+ */
+
 import React, { useState, useEffect } from 'react';
 import {
   View,

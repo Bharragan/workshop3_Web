@@ -1,3 +1,21 @@
+/**
+ * Pantalla de Inicio de Sesión.
+ *
+ * Permite al usuario iniciar sesión ingresando su correo electrónico y contraseña.
+ * Realiza validaciones básicas y una solicitud al servidor para autenticar al usuario.
+ *
+ * @component
+ *
+ * @param {Object} props - Propiedades de la pantalla.
+ * @param {Object} props.navigation - Objeto de navegación que permite la transición entre pantallas.
+ *
+ * @returns {JSX.Element} - Elemento JSX que representa la pantalla de inicio de sesión.
+ *
+ * @example
+ * // Ejemplo de uso en una navegación de React Navigation:
+ * <Stack.Screen name="Login" component={LoginScreen} />
+ */
+
 import React, { useState } from 'react';
 import { View, Text, Alert } from 'react-native';
 import axios from 'axios';

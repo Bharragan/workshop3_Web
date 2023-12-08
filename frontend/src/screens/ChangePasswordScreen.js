@@ -1,3 +1,22 @@
+/**
+ * Pantalla de Cambio de Contraseña.
+ *
+ * Esta pantalla permite al usuario cambiar su contraseña. Muestra campos para ingresar la nueva
+ * contraseña y confirmarla. Realiza validaciones en el lado del cliente y hace una solicitud al
+ * servidor para actualizar la contraseña.
+ *
+ * @component
+ *
+ * @param {Object} props - Propiedades de la pantalla.
+ * @param {Object} props.navigation - Objeto de navegación que permite la transición entre pantallas.
+ *
+ * @returns {JSX.Element} - Elemento JSX que representa la pantalla de cambio de contraseña.
+ *
+ * @example
+ * // Ejemplo de uso en una navegación de React Navigation:
+ * <Stack.Screen name="ChangePassword" component={ChangePasswordScreen} />
+ */
+
 import React, { useState } from 'react';
 import { View, Alert, Text } from 'react-native';
 import axios from 'axios';

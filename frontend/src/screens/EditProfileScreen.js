@@ -1,3 +1,21 @@
+/**
+ * Pantalla de Edición de Perfil.
+ *
+ * Permite al usuario editar su información de perfil, incluyendo nombre, apellido,
+ * correo electrónico y fecha de nacimiento. Realiza validaciones en el lado del cliente
+ * y hace una solicitud al servidor para actualizar la información del perfil.
+ *
+ * @component
+ *
+ * @param {Object} props - Propiedades de la pantalla.
+ * @param {Object} props.navigation - Objeto de navegación que permite la transición entre pantallas.
+ *
+ * @returns {JSX.Element} - Elemento JSX que representa la pantalla de edición de perfil.
+ *
+ * @example
+ * // Ejemplo de uso en una navegación de React Navigation:
+ * <Stack.Screen name="EditProfile" component={EditProfileScreen} />
+ */
 import React, { useState, useEffect } from 'react';
 import { View, Alert, Text } from 'react-native';
 import axios from 'axios';

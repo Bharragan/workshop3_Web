@@ -1,3 +1,19 @@
+/**
+ * Pantalla de Repositorios.
+ *
+ * Muestra una lista de repositorios de un usuario específico, con detalles como nombre,
+ * descripción, fecha de la última modificación y cantidad de commits. Permite al usuario
+ * seleccionar un repositorio para ver más detalles.
+ *
+ * @component
+ *
+ * @returns {JSX.Element} - Elemento JSX que representa la pantalla de repositorios.
+ *
+ * @example
+ * // Ejemplo de uso en una navegación de React Navigation:
+ * <Stack.Screen name="Repositories" component={RepositoriesScreen} />
+ */
+
 import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native';
 import axios from 'axios';

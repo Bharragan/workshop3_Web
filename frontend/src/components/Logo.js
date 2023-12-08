@@ -1,7 +1,21 @@
+/**
+ * Componente de logotipo.
+ * @component
+ *
+ * @returns {JSX.Element} - Elemento JSX que representa el logotipo.
+ *
+ * @example
+ * // Ejemplo de uso del componente Logo
+ * <Logo />
+ */
 import React from 'react';
 import { Image, StyleSheet, View } from 'react-native';
 import { theme } from '../core/theme';
 
+/**
+ * Componente Logo.
+ * @returns {JSX.Element} - Elemento JSX que representa el logotipo.
+ */
 export default function Logo() {
   return (
     <View style={styles.container}>
@@ -10,6 +24,7 @@ export default function Logo() {
   );
 }
 
+// Estilos del componente.
 const styles = StyleSheet.create({
   container: {
     width: 110,

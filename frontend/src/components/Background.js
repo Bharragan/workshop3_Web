@@ -1,7 +1,25 @@
-import React from 'react'
-import { ImageBackground, StyleSheet, KeyboardAvoidingView } from 'react-native'
-import { theme } from '../core/theme'
+/**
+ * Fondo reutilizable para las pantallas de la aplicación.
+ * @component
+ *
+ * @param {Object} props - Propiedades del componente.
+ * @param {React.ReactNode} props.children - Componentes secundarios anidados dentro del fondo.
+ *
+ * @example
+ * <Background>
+ *   {/* Contenido de la pantalla }
+ * </Background>
+ */
+import React from 'react';
+import { ImageBackground, StyleSheet, KeyboardAvoidingView } from 'react-native';
+import { theme } from '../core/theme';
 
+/**
+ * Componente Background.
+ * @param {Object} props - Propiedades del componente.
+ * @param {React.ReactNode} props.children - Componentes secundarios anidados dentro del fondo.
+ * @returns {JSX.Element} - Elemento JSX que representa el fondo de la pantalla.
+ */
 export default function Background({ children }) {
   return (
     <ImageBackground
@@ -13,9 +31,10 @@ export default function Background({ children }) {
         {children}
       </KeyboardAvoidingView>
     </ImageBackground>
-  )
+  );
 }
 
+// Estilos del componente.
 const styles = StyleSheet.create({
   background: {
     flex: 1,
@@ -31,4 +50,4 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-})
+});

@@ -1,12 +1,26 @@
+/**
+ * @fileoverview Servicios para interactuar con la API de GitHub.
+ * @module services/githubService
+ */
+
 const { Octokit } = require('@octokit/rest');
 const dotenv = require('dotenv');
 
 dotenv.config();
 
+// Instancia de Octokit con autenticación utilizando el token de GitHub
 const octokit = new Octokit({
   auth: process.env.GIT_SECRET,
 });
 
+/**
+ * Obtiene la lista de repositorios de un usuario en GitHub.
+ * @function
+ * @async
+ * @param {string} username - Nombre de usuario de GitHub.
+ * @returns {Promise<Array>} - Promesa que se resuelve con la lista de repositorios del usuario.
+ * @throws {Object} - Objeto de error en caso de fallo en la solicitud.
+ */
 const getUserRepos = async (username) => {
   try {
     const response = await octokit.request('GET /users/{username}/repos', {
@@ -22,6 +36,15 @@ const getUserRepos = async (username) => {
   }
 };
 
+/**
+ * Obtiene la lista de commits de un repositorio en GitHub.
+ * @function
+ * @async
+ * @param {string} username - Nombre de usuario de GitHub.
+ * @param {string} repoName - Nombre del repositorio.
+ * @returns {Promise<Array>} - Promesa que se resuelve con la lista de commits del repositorio.
+ * @throws {Object} - Objeto de error en caso de fallo en la solicitud.
+ */
 const getRepoCommits = async (username, repoName) => {
   try {
     const response = await octokit.repos.listCommits({
@@ -35,6 +58,14 @@ const getRepoCommits = async (username, repoName) => {
   }
 };
 
+/**
+ * Obtiene la información del usuario de GitHub, incluyendo repositorios y commits.
+ * @function
+ * @async
+ * @param {string} username - Nombre de usuario de GitHub.
+ * @returns {Promise<Array>} - Promesa que se resuelve con la información del usuario, incluyendo repositorios y commits.
+ * @throws {Object} - Objeto de error en caso de fallo en la solicitud.
+ */
 const getUserInfo = async (username) => {
   try {
     const userRepos = await getUserRepos(username);
@@ -54,4 +85,4 @@ const getUserInfo = async (username) => {
   }
 };
 
-module.exports = { getUserInfo, getUserRepos, getRepoCommits};
+module.exports = { getUserInfo, getUserRepos, getRepoCommits };
