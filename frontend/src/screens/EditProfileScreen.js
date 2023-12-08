@@ -105,8 +105,9 @@ const EditProfileScreen = ({ navigation }) => {
   };
 
   const isValidEmail = (email) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
+    const ucnDomainRegex =
+      /^[a-zA-Z0-9._-]+@(ucn\.cl|alumnos\.ucn\.cl|disc\.ucn\.cl|ce\.ucn\.cl)$/;
+      return ucnDomainRegex.test(email);
   };
 
   const isValidFullName = (firstName, lastName) => {
