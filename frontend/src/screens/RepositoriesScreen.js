@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, TouchableOpacity } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -13,6 +13,8 @@ const RepositoriesScreen = () => {
   const [repos, setRepos] = useState([]);
   const username = 'bharragan';
   const navigation = useNavigation();
+  const [isLoading, setIsLoading] = useState(true);
+
 
   useEffect(() => {
     const fetchRepositories = async () => {
@@ -43,8 +45,11 @@ const RepositoriesScreen = () => {
   
         // Ordenar repositorios por fecha de última modificación (de más reciente a más antiguo)
         reposWithCommits.sort((a, b) => new Date(b.pushed_at) - new Date(a.pushed_at));
-  
+        setIsLoading(true);
+
         setRepos(reposWithCommits);
+        setIsLoading(false);
+
       } catch (error) {
         console.error('Error al obtener repositorios:', error);
       }
@@ -68,14 +73,22 @@ const RepositoriesScreen = () => {
     <Background>
       <BackButton goBack={navigation.goBack} />
       <Header mode="big">Repositorios de {username}</Header>
-
-      <FlatList
-        data={repos}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={renderRepositoryItem}
-      />
+  
+      {isLoading ? (
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+          {/* Aquí puedes usar un componente de rueda de carga, por ejemplo, ActivityIndicator */}
+          <ActivityIndicator size="large" color="#0000ff" />
+        </View>
+      ) : (
+        <FlatList
+          data={repos}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={renderRepositoryItem}
+        />
+      )}
     </Background>
   );
+  
 };
 
 export default RepositoriesScreen;

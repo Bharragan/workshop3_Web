@@ -18,4 +18,7 @@ router.put('/update-profile', jwtMiddleware, userController.updateProfile);
 // Ruta para obtener la lista de todos los usuarios
 router.get('/all-users', userController.getAllUsers);
 
+// Ruta para cambiar la contraseña del usuario
+router.put('/change-password', jwtMiddleware, userController.updateUserPassword);
+
 module.exports = router;

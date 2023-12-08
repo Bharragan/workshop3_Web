@@ -132,6 +132,28 @@ const userController = {
       res.status(500).json({ message: 'Error al obtener la lista de usuarios.' });
     }
   },
+  
+updateUserPassword: async (req, res) => {
+  const userId = req.userId;
+  const { password } = req.body;
+
+  // Hash de la contraseña
+  const hashedPassword = await bcrypt.hash(password, 10);
+
+  try {
+    // Obtener el usuario desde el token
+    const user = await User.findById(userId);
+
+    // Actualizar la contraseña
+    user.password = hashedPassword;
+    await user.save();
+
+    res.json({ message: 'Contraseña actualizada con éxito' });
+  } catch (error) {
+    console.error('Error al actualizar la contraseña:', error);
+    res.status(500).json({ message: 'Error interno del servidor' });
+  }
+},
 
   protectedRoute: async (req, res) => {
     res.status(200).json({ message: 'Ruta protegida, usuario autenticado.' });

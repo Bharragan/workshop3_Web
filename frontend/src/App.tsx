@@ -9,9 +9,7 @@ import RepositoryDetailScreen from './screens/RepositoryDetailScreen';
 import HomeScreen from './screens/HomeScreen'; 
 import EditProfileScreen from './screens/EditProfileScreen'; 
 import RegisterScreen from './screens/RegisterScreen';
-
-import { enGB, registerTranslation } from 'react-native-paper-dates'
-registerTranslation('en-GB', enGB)
+import ChangePasswordScreen from './screens/ChangePasswordScreen';
 
 const Stack = createStackNavigator();
 
@@ -31,6 +29,7 @@ const App = () => {
         <Stack.Screen name="Home" component={HomeScreen} /> 
         <Stack.Screen name="EditProfile" component={EditProfileScreen} /> 
         <Stack.Screen name='Register' component={RegisterScreen} />
+        <Stack.Screen name='ChangePassword' component={ChangePasswordScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

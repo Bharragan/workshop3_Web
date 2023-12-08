@@ -33,6 +33,10 @@ const HomeScreen = ({ navigation }) => {
     // Navegar a la pantalla de repositorios
     navigation.navigate('Repositories');
   };
+  const goToChangePass = () => {
+    // Navegar a la pantalla de repositorios
+    navigation.navigate('ChangePassword');
+  };
 
   const goToEditInfo = () => {
     // Navegar a la pantalla de edición de información
@@ -69,6 +73,12 @@ const HomeScreen = ({ navigation }) => {
         onPress={goToEditInfo}
       >
       Editar Información
+      </Button>
+      <Button
+        mode="contained"
+        onPress={goToChangePass}
+      >
+      Actualizar contraseña
       </Button>
       <Button
         mode="outlined"
