@@ -9,9 +9,13 @@ router.post('/register', userController.register);
 // Ruta de inicio de sesión
 router.post('/login', userController.login);
 
-// Ejemplo de ruta protegida con JWT
-router.get('/protected', jwtMiddleware, (req, res) => {
-  res.status(200).json({ message: 'Ruta protegida, usuario autenticado.' });
-});
+// Ruta para obtener la información del usuario actual
+router.get('/current-user', jwtMiddleware, userController.getCurrentUser);
+
+// Ruta para la actualización de información del usuario
+router.put('/update-profile', jwtMiddleware, userController.updateProfile);
+
+// Ruta para obtener la lista de todos los usuarios
+router.get('/all-users', jwtMiddleware, userController.getAllUsers);
 
 module.exports = router;
