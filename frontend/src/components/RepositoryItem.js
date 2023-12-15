@@ -14,9 +14,9 @@
  * <RepositoryItem repo={{ name: 'MiRepo', pushed_at: '2023-01-01', commitCount: 5 }} />
  */
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
-import { Card, Title, Paragraph, useTheme } from 'react-native-paper';
-import { theme } from '../core/theme';
+import {View, StyleSheet} from 'react-native';
+import {Card, Title, Paragraph, useTheme} from 'react-native-paper';
+import {theme} from '../core/theme';
 
 /**
  * Componente RepositoryItem.
@@ -27,7 +27,7 @@ import { theme } from '../core/theme';
  * @param {number} props.repo.commitCount - Número de commits en el repositorio.
  * @returns {JSX.Element} - Elemento JSX que representa un ítem de repositorio.
  */
-const RepositoryItem = ({ repo }) => {
+const RepositoryItem = ({repo}) => {
   const theme = useTheme();
 
   return (
@@ -35,8 +35,23 @@ const RepositoryItem = ({ repo }) => {
       <View style={styles.header}>
         <Title style={styles.title}>{repo.name}</Title>
       </View>
-      <Card.Content style={{ backgroundColor: '#f7f3f9' }}>
-        <Paragraph style={styles.info}>Última Modificación: {new Date(repo.pushed_at).toLocaleDateString()}</Paragraph>
+      <Card.Content style={{backgroundColor: '#f7f3f9'}}>
+        <Paragraph style={styles.info}>
+          Creado el:{' '}
+          {new Date(repo.created_at).toLocaleDateString('es-ES', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+          })}
+        </Paragraph>
+        <Paragraph style={styles.info}>
+          Última Modificación:{' '}
+          {new Date(repo.pushed_at).toLocaleDateString('es-ES', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+          })}
+        </Paragraph>
         <Paragraph style={styles.info}>Commits: {repo.commitCount}</Paragraph>
       </Card.Content>
     </Card>
@@ -51,7 +66,7 @@ const styles = StyleSheet.create({
     elevation: 4,
   },
   header: {
-    backgroundColor: "#6750a4",
+    backgroundColor: '#6750a4',
     padding: 12,
     borderTopLeftRadius: 8,
     borderTopRightRadius: 8,

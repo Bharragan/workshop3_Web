@@ -27,7 +27,7 @@ import { REACT_APP_API_URL } from '@env';
 
 const RepositoriesScreen = () => {
   const [repos, setRepos] = useState([]);
-  const username = 'bharragan';
+  const username = 'Dizkm8';
   const navigation = useNavigation();
   const [isLoading, setIsLoading] = useState(true);
 
